@@ -32,7 +32,17 @@ app.all('/favicon.ico', function(req, res) {
     
 });
 app.all('/player/register', function(req, res) {
-    res.send("Coming soon...");
+    const _token = req.body._token;
+    const growId = "Guest";
+    const password = "Guest";
+
+    const token = Buffer.from(
+        `_token=${_token}&growId=${growId}&password=${password}`,
+    ).toString('base64');
+   
+    res.send(
+        `{"status":"success","message":"Account Validated.","token":"${token}","url":"","accountType":"growtopia"}`,
+    );
 });
 app.all('/player/login/dashboard', function (req, res) {
     const tData = {};
@@ -76,7 +86,7 @@ app.all('/player/growid/checktoken', (req, res) => {
     }
 });
 app.get('/', function (req, res) {
-   res.send('ZIDAN BNGST');
+   res.send('DiamondPS');
 });
 
 app.listen(5000, function () {
