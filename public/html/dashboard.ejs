@@ -68,7 +68,7 @@
                                                                     action="/player/growid/login/validate"
                                                                     accept-charset="UTF-8" class="" role="form"
                                                                     required="required" autocomplete="off">
-                                                                    <input name="_token" type="hidden" value="" />
+                                                                    <input name="_token" type="hidden" value="<%= _token %>">
                                                                     <div class="form-group">
                                                                         <input id="login-name"
                                                                             class="form-control grow-text"
@@ -93,9 +93,10 @@
                                                                 <form method="POST"
                                                                     action="/player/growid/login/validate"
                                                                     accept-charset="UTF-8" class="" role="form">
-                                                                    <input name="_token" type="hidden" value="" />
+                                                                    <input name="_token" type="hidden" value="<%= _token %>">
                                                                     <input name="growId" type="hidden" value="" />
                                                                     <input name="password" type="hidden" value="" />
+                                                                    <input name="email" type="hidden" value="guest@gmail.com">
                                                                     <input class="btn btn-lg btn-primary grow-button"
                                                                         type="submit"
                                                                         value="Don't have any GrowID? Register here!" />
