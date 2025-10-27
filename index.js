@@ -14,6 +14,7 @@ app.use(compression({
         return compression.filter(req, res);
     }
 }));
+app.set('view engine', 'ejs');
 app.set('trust proxy', 1);
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -51,7 +52,7 @@ app.all('/player/login/dashboard', function (req, res) {
         if (uName[1] && uPass[1]) { res.redirect('/player/growid/login/validate'); }
     } catch (why) { console.log(`Warning: ${why}`); }
 
-    res.render(__dirname + '/public/html/dashboard.html', {data: tData});
+    res.render(__dirname + '/public/html/dashboard.ejs', {data: tData});
 });
 
 app.all('/player/growid/login/validate', (req, res) => {
@@ -71,7 +72,7 @@ app.all('/player/growid/checktoken', (req, res) => {
     const { refreshToken } = req.body;
     try {
     const decoded = Buffer.from(refreshToken, 'base64').toString('utf-8');
-    if (typeof decoded !== 'string' && !decoded.startsWith('growId=') && !decoded.includes('password=')) return res.render(__dirname + '/public/html/dashboard.html');
+    if (typeof decoded !== 'string' && !decoded.startsWith('growId=') && !decoded.includes('password=')) return res.render(__dirname + '/public/html/dashboard.ejs');
     res.json({
         status: 'success',
         message: 'Account Validated.',
@@ -81,7 +82,7 @@ app.all('/player/growid/checktoken', (req, res) => {
     });
     } catch (error) {
         console.log("Redirecting to player login dashboard");
-        res.render(__dirname + '/public/html/dashboard.html');
+        res.render(__dirname + '/public/html/dashboard.ejs');
     }
 });
 app.get('/', function (req, res) {
