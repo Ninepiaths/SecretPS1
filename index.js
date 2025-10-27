@@ -56,18 +56,22 @@ app.all('/player/login/dashboard', (req, res) => {
 });
 
 app.all('/player/growid/login/validate', (req, res) => {
-    const _token = req.body._token;
-    const growId = req.body.growId;
-    const password = req.body.password;
-
-    const token = Buffer.from(
-        `_token=${_token}&growId=${growId}&password=${password}`,
+    const { _token, growId, password, email } = req.body
+    const validateTokens = Buffer.from(
+            `_token=${_token}&growId=${growId}&password=${password}&email=`,
     ).toString('base64');
-   
+
+    if (email == 'guest@gmail.com') {
+        validateTokens = Buffer.from(
+            `_token=${_token}&growId=Guest&password=${password}&email=${email}`,
+        ).toString('base64')
+    }
+
     res.send(
-        `{"status":"success","message":"Account Validated.","token":"${token}","url":"","accountType":"growtopia"}`,
+        `{"status":"success","message":"Account Validated.","token":"${validateTokens}","url":"","accountType":"growtopia"}`,
     );
 });
+
 app.all('/player/growid/checktoken', (req, res) => {
     const { refreshToken } = req.body;
     try {
