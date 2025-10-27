@@ -27,82 +27,66 @@ app.use(function (req, res, next) {
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+//app.use(rateLimiter({ windowMs: 15 * 60 * 1000, max: 100, headers: true }));
 app.all('/favicon.ico', function(req, res) {
     
 });
+app.all('/player/register', function(req, res) {
+    res.send("Coming soon...");
+});
 
-app.all('/player/login/dashboard', function (req, res) {
+app.all('/player/login/dashboard', (req, res) => {
     const tData = {};
     try {
-        const uData = JSON.stringify(req.body).split('"')[1].split('\\n'); const uName = uData[0].split('|'); const uPass = uData[1].split('|');
-        for (let i = 0; i < uData.length - 1; i++) { const d = uData[i].split('|'); tData[d[0]] = d[1]; }
-        if (uName[1] && uPass[1]) { res.redirect('/player/growid/login/validate'); }
-    } catch (why) { console.log(`Warning: ${why}`); }
-
-    res.render(__dirname + '/public/html/dashboard.ejs', {data: tData});
+        const rawData = JSON.stringify(req.body);
+        const splitData = rawData.split('"')[1].split('\\n');
+        const uName = splitData[0].split('|');
+        const uPass = splitData[1].split('|');
+        for (let i = 0; i < splitData.length - 1; i++) {
+            const pair = splitData[i].split('|');
+            tData[pair[0]] = pair[1];
+        }
+        if (uName[1] && uPass[1]) {
+            return res.redirect('/player/growid/login/validate');
+        }
+    } catch (err) {
+        console.log(`Warning: ${err}`);
+    }
+    res.render(__dirname + '/public/html/dashboard.ejs', { data: tData, _token: JSON.stringify(req.body) });
 });
 
 app.all('/player/growid/login/validate', (req, res) => {
-    const { _token = '', growId = '', password = '', email = '' } = req.body;
+    const _token = req.body._token;
+    const growId = req.body.growId;
+    const password = req.body.password;
 
-    let encodedData;
-    if (email === 'guest@gmail.com') {
-        encodedData = Buffer.from(
-            `_token=${_token}&growId=Guest&password=Guest&email=${email}`
-        ).toString('base64');
-    } else {
-        encodedData = Buffer.from(
-            `_token=${_token}&growId=${growId}&password=${password}&email=${email}`
-        ).toString('base64');
-    }
-
-    const response = {
+    const token = Buffer.from(
+        `_token=${_token}&growId=${growId}&password=${password}`,
+    ).toString('base64');
+   
+    res.send(
+        `{"status":"success","message":"Account Validated.","token":"${token}","url":"","accountType":"growtopia"}`,
+    );
+});
+app.all('/player/growid/checktoken', (req, res) => {
+    const { refreshToken } = req.body;
+    try {
+    const decoded = Buffer.from(refreshToken, 'base64').toString('utf-8');
+    if (typeof decoded !== 'string' && !decoded.startsWith('growId=') && !decoded.includes('password=')) return res.render(__dirname + '/public/html/dashboard.ejs');
+    res.json({
         status: 'success',
         message: 'Account Validated.',
-        token: encodedData,
+        token: refreshToken,
         url: '',
-        accountType: 'growtopia'
-    };
-    res.type('application/json').send(response);
-});
-
-app.all('/player/growid/checktoken', (req, res) => {
-    const refreshToken = req.body.refreshToken || req.query.refreshToken || '';
-
-    if (!refreshToken) {
-        res.status(404);
-        return res.send({
-            status: 'error',
-            message: 'Missing refresh token.'
-        });
-    }
-
-    try {
-        const decoded = Buffer.from(refreshToken, 'base64').toString('utf-8');
-
-        if (!decoded.includes('growId=') || !decoded.includes('password=')) {
-            console.warn('[Growtopia Dashboard] Invalid or malformed token, redirecting...');
-            return res.render(__dirname + '/public/html/dashboard.ejs');
-        }
-
-        const response = {
-            status: 'success',
-            message: 'Account Validated.',
-            token: refreshToken,
-            url: '',
-            accountType: 'growtopia'
-        };
-
-        console.log('[Growtopia Dashboard] Token validation successful');
-        res.type('application/json').send(response);
-    } catch (err) {
-        console.error('[Growtopia Dashboard] Token decoding failed:', err.message);
+        accountType: 'growtopia',
+    });
+    } catch (error) {
+        console.log("Redirecting to player login dashboard");
         res.render(__dirname + '/public/html/dashboard.ejs');
     }
 });
-
 app.get('/', function (req, res) {
-   res.send('Diamond PS');
+   res.send('ZIDAN BNGST');
 });
 
 app.listen(5000, function () {
