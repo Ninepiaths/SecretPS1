@@ -121,8 +121,7 @@ $(document).ready(function () {
 
     $('#registerButton').click(function (e) {
         e.preventDefault();
-        $('#menuScreen').addClass('hidden');
-        $('#registerFormContainer').removeClass('hidden');
+        $('#registerFormContainer form').submit();
     });
 
     $('#loginButton').click(function (e) {
