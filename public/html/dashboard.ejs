@@ -109,21 +109,20 @@
                                                         <input name="email" type="hidden" value="" />
                                                         <div class="form-group">
                                                             <input id="login-name" class="form-control grow-text"
-                                                                placeholder="Your RealityPS Name *" name="growId"
+                                                                placeholder="Your Growtopia Name *" name="growId"
                                                                 type="text" />
                                                         </div>
                                                         <div class="form-group">
                                                             <input id="password" class="form-control grow-text"
-                                                                placeholder="Your RealityPS Password *" name="password"
+                                                                placeholder="Your Growtopia Password *" name="password"
                                                                 type="password" />
+                                                        </div>
+                                                        <div class="form-group text-center forgot-password">
+                                                            <a href="https://discord.gg/ZCQw89gahn" target="_blank">Need Help? Join our Discord!</a>
                                                         </div>
                                                         <div class="form-group text-center">
                                                             <input class="btn btn-lg btn-primary grow-button"
-                                                                type="submit" value="Login" />
-                                                        </div>
-                                                        <div class="form-group text-center">
-                                                            <a href="#" id="backToMenu1"
-                                                                class="btn btn-link text-light">Back</a>
+                                                                type="submit" value="Log in" />
                                                         </div>
                                                     </form>
                                                 </div>
@@ -175,13 +174,12 @@
             $('#loginButton').click(function (e) {
                 e.preventDefault();
 
-                $('.section-title h2').eq(0).text('Logging in...');
+                $('.section-title h2').eq(0).text('Log in with your GrowID');
                 $('.section-title h2').eq(1).text('');
 
-                setTimeout(() => {
-                    $('#menuScreen').addClass('hidden');
-                    $('#loginFormContainer').removeClass('hidden');
-                }, 300);
+
+                $('#menuScreen').addClass('hidden');
+                $('#loginFormContainer').removeClass('hidden');
             });
 
             $('#backToMenu1, #backToMenu2').click(function (e) {
