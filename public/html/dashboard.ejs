@@ -174,12 +174,22 @@
 
             $('#loginButton').click(function (e) {
                 e.preventDefault();
-                $('#menuScreen').addClass('hidden');
-                $('#loginFormContainer').removeClass('hidden');
+
+                $('.section-title h2').eq(0).text('Logging in...');
+                $('.section-title h2').eq(1).text('');
+
+                setTimeout(() => {
+                    $('#menuScreen').addClass('hidden');
+                    $('#loginFormContainer').removeClass('hidden');
+                }, 300);
             });
 
             $('#backToMenu1, #backToMenu2').click(function (e) {
                 e.preventDefault();
+
+                $('.section-title h2').eq(0).text('Welcome to DiamondPS');
+                $('.section-title h2').eq(1).text('Select an account to continue');
+
                 $('#loginFormContainer, #registerFormContainer').addClass('hidden');
                 $('#menuScreen').removeClass('hidden');
             });
